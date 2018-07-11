@@ -1,5 +1,22 @@
 apply plugin: 'com.android.application'
 
+/**************************
+ * Load local properties
+ **************************/
+
+//create a variable to hold local.properties file
+def localPropertiesFile = rootProject.file("local.properties")
+
+//create a new Properties object to hold local properties
+def localProperties = new Properties()
+
+//initialize the localProperties with localPropertiesFile
+localProperties.load(new FileInputStream(localPropertiesFile))
+
+/*************
+ * Other Android related configs
+ */
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -9,6 +26,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        def apiKey = localProperties["apiKey"]
+        buildConfigField("String", "API_KEY", "\"${apiKey}\"")
     }
     buildTypes {
         release {
