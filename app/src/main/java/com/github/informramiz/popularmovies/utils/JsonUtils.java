@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class JsonUtils {
     @Nullable
-    public static MovieApiResponse parseMovieApiJsonResponse(@NonNull String response) {m
+    public static MovieApiResponse parseMovieApiJsonResponse(@NonNull String response) {
         try {
             MovieApiResponse movieApiResponse = new MovieApiResponse();
 
