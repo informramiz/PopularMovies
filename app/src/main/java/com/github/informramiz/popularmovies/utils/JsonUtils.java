@@ -18,21 +18,22 @@ import java.util.List;
  */
 public class JsonUtils {
     @Nullable
-    public static MovieApiResponse parseMovieApiJsonResponse(@NonNull String response) {
-        MovieApiResponse movieApiResponse = new MovieApiResponse();
-
+    public static MovieApiResponse parseMovieApiJsonResponse(@NonNull String response) {m
         try {
+            MovieApiResponse movieApiResponse = new MovieApiResponse();
+
             JSONObject jsonObject = new JSONObject(response);
             movieApiResponse.setPage(jsonObject.optInt("page"));
             movieApiResponse.setTotalResults(jsonObject.optInt("total_results"));
             movieApiResponse.setTotalPages(jsonObject.optInt("total_pages"));
             JSONArray moviesJsonArray = jsonObject.optJSONArray("results");
             movieApiResponse.setResults(parseMoviesJsonArray(moviesJsonArray));
+
+            return movieApiResponse;
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
-
-        return movieApiResponse;
     }
 
     private static List<Movie> parseMoviesJsonArray(JSONArray moviesJsonArray) {
