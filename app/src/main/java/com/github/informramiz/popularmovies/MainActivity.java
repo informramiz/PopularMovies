@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecycleView
         startActivity(movieDetailActivityIntent);
     }
 
-    public class FetchMoviesTask extends AsyncTask<String, Void, MovieApiResponse> {
+    class FetchMoviesTask extends AsyncTask<String, Void, MovieApiResponse> {
 
         @Override
         protected void onPreExecute() {
