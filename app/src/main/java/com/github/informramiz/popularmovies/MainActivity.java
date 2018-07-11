@@ -1,5 +1,6 @@
 package com.github.informramiz.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecycleView
         mMoviesRecycleViewAdapter = new MoviesRecycleViewAdapter(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         mMoviesListRecyclerView.setLayoutManager(gridLayoutManager);
-//        mMoviesListRecyclerView.setHasFixedSize(true);
+        mMoviesListRecyclerView.setHasFixedSize(true);
         mMoviesListRecyclerView.setAdapter(mMoviesRecycleViewAdapter);
 
         mSortOrder = NetworkUtils.SORT_ORDER_POPULAR;
@@ -118,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements MoviesRecycleView
 
     @Override
     public void onListItemClick(Movie clickedMovie) {
-
+        Intent movieDetailActivityIntent = new Intent(this, MovieDetailActivity.class);
+        movieDetailActivityIntent.putExtra(MovieDetailActivity.EXTRA_MOVIE, clickedMovie);
+        startActivity(movieDetailActivityIntent);
     }
 
     public class FetchMoviesTask extends AsyncTask<String, Void, MovieApiResponse> {
