@@ -7,7 +7,7 @@
     <dimen name="standard_padding">16dp</dimen>
     <dimen name="text_size_error_msg">22sp</dimen>
     <dimen name="list_item_movie_min_height">100dp</dimen>
-    <dimen name="min_movie_poster_height">200dp</dimen>
+    <dimen name="min_movie_poster_height">250dp</dimen>
     <dimen name="min_movie_poster_width">200dp</dimen>
 
     <dimen name="field_name_text_size">22sp</dimen>
