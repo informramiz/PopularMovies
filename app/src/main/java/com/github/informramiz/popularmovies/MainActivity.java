@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mMoviesDataTextView;
     private TextView mErrorMsgTextView;
     private ProgressBar mLoadingIndicator;
-
+    private @NetworkUtils.SortOrder String mSortOrder;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +35,14 @@ public class MainActivity extends AppCompatActivity {
         mErrorMsgTextView = findViewById(R.id.tv_error_message);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
+        mSortOrder = NetworkUtils.SORT_ORDER_POPULAR;
         loadMoviesData();
     }
 
     private void loadMoviesData() {
         if (NetworkUtils.isInternetPresent(this)) {
             mMoviesDataTextView.setText("");
-            new FetchMoviesTask().execute(NetworkUtils.SORT_ORDER_POPULAR);
+            new FetchMoviesTask().execute(mSortOrder);
         } else {
             showErrorMessageView();
         }
@@ -52,6 +56,41 @@ public class MainActivity extends AppCompatActivity {
     private void showErrorMessageView() {
         mMoviesDataTextView.setVisibility(View.INVISIBLE);
         mErrorMsgTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mSortOrder.equals(NetworkUtils.SORT_ORDER_POPULAR)) {
+            menu.findItem(R.id.action_sort_by_popular).setChecked(true);
+        } else if (mSortOrder.equals(NetworkUtils.SORT_ORDER_TOP_RATED)){
+            menu.findItem(R.id.action_sort_by_top_rated).setChecked(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_sort_by_popular:
+                item.setChecked(true);
+                mSortOrder = NetworkUtils.SORT_ORDER_POPULAR;
+                loadMoviesData();
+                return true;
+
+            case R.id.action_sort_by_top_rated:
+                item.setChecked(true);
+                mSortOrder = NetworkUtils.SORT_ORDER_TOP_RATED;
+                loadMoviesData();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class FetchMoviesTask extends AsyncTask<String, Void, MovieApiResponse> {
