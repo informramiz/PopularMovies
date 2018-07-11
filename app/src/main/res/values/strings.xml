@@ -1,6 +1,14 @@
 <resources>
+    <!--MainActivity-->
     <string name="app_name">Popular Movies</string>
     <string name="error_message_fetch_movies_failed">Fetch movies failed, please try again later.</string>
     <string name="action_sort_by_popular">Sort by popular</string>
     <string name="action_sort_by_top_rated">Sort by top rated</string>
+
+    <!--MovieDetailActivity-->
+    <string name="title_activity_movie_detail">Movie Details</string>
+    <string name="synopsis">Synopsis:</string>
+    <string name="user_rating">User Rating:</string>
+    <string name="release_date">Release date:</string>
+    <string name="error_msg_invalid_movie_data">Invalid movie data</string>
 </resources>
