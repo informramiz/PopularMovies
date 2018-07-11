@@ -101,6 +101,7 @@ public class NetworkUtils {
         try {
             InputStream inputStream = httpURLConnection.getInputStream();
             Scanner scanner = new Scanner(inputStream);
+            scanner.useDelimiter("\\A");
             if (scanner.hasNext()) {
                 return scanner.next();
             } else {
