@@ -42,7 +42,7 @@ public class NetworkUtils {
 
     /**
      * Given the sort order of the movies, this method returns the full HTTP URL of the API
-     * @param sortOrder The sorder order of movies, popular, top_rated etc.
+     * @param sortOrder The sort order order of movies, popular, top_rated etc.
      * @return The full HTTP URL of the API
      */
     @Nullable
