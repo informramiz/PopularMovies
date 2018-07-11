@@ -67,7 +67,7 @@ public class MoviesRecycleViewAdapter extends RecyclerView.Adapter<MoviesRecycle
     }
 
     public class MovieItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView posterImageView;
+        final ImageView posterImageView;
 
         public MovieItemViewHolder(View itemView) {
             super(itemView);
