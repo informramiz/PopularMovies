@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.informramiz.popularmovies.model.Movie;
 import com.github.informramiz.popularmovies.model.MovieApiResponse;
 import com.github.informramiz.popularmovies.utils.JsonUtils;
 import com.github.informramiz.popularmovies.utils.NetworkUtils;
@@ -18,22 +21,29 @@ import com.github.informramiz.popularmovies.utils.NetworkUtils;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviesRecycleViewAdapter.ListItemClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private TextView mMoviesDataTextView;
+    private RecyclerView mMoviesListRecyclerView;
+    private MoviesRecycleViewAdapter mMoviesRecycleViewAdapter;
     private TextView mErrorMsgTextView;
     private ProgressBar mLoadingIndicator;
     private @NetworkUtils.SortOrder String mSortOrder;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mMoviesDataTextView = findViewById(R.id.tv_movies_data);
+        mMoviesListRecyclerView = findViewById(R.id.rv_movies_list);
         mErrorMsgTextView = findViewById(R.id.tv_error_message);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
+        mMoviesRecycleViewAdapter = new MoviesRecycleViewAdapter(this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        mMoviesListRecyclerView.setLayoutManager(gridLayoutManager);
+//        mMoviesListRecyclerView.setHasFixedSize(true);
+        mMoviesListRecyclerView.setAdapter(mMoviesRecycleViewAdapter);
 
         mSortOrder = NetworkUtils.SORT_ORDER_POPULAR;
         loadMoviesData();
@@ -41,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadMoviesData() {
         if (NetworkUtils.isInternetPresent(this)) {
-            mMoviesDataTextView.setText("");
             new FetchMoviesTask().execute(mSortOrder);
         } else {
             showErrorMessageView();
@@ -49,13 +58,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMoviesDataView() {
-        mMoviesDataTextView.setVisibility(View.VISIBLE);
+        mMoviesListRecyclerView.setVisibility(View.VISIBLE);
         mErrorMsgTextView.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     private void showErrorMessageView() {
-        mMoviesDataTextView.setVisibility(View.INVISIBLE);
+        mMoviesListRecyclerView.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
         mErrorMsgTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoadingIndicatorView() {
+        mMoviesListRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorMsgTextView.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingIndicatorView() {
+        mMoviesListRecyclerView.setVisibility(View.VISIBLE);
+        mErrorMsgTextView.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -93,12 +116,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onListItemClick(Movie clickedMovie) {
+
+    }
+
     public class FetchMoviesTask extends AsyncTask<String, Void, MovieApiResponse> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
+            showLoadingIndicatorView();
         }
 
         @Nullable
@@ -130,11 +158,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(@Nullable MovieApiResponse movieApiResponse) {
             super.onPostExecute(movieApiResponse);
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
+            hideLoadingIndicatorView();
 
             if (movieApiResponse != null) {
                 Log.v(TAG, "Total movies fetched=" + movieApiResponse.getResults().size());
-                mMoviesDataTextView.setText(String.valueOf(movieApiResponse.getResults().size()));
+                mMoviesRecycleViewAdapter.setMovies(movieApiResponse.getResults());
                 showMoviesDataView();
             } else {
                 showErrorMessageView();
