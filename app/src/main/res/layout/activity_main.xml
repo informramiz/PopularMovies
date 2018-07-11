@@ -7,8 +7,28 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv_movies_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="Hello World!" />
+
+    <TextView
+        android:id="@+id/tv_error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:text="@string/error_message_fetch_movies_failed"
+        android:textSize="@dimen/text_size_error_msg"
+        android:padding="@dimen/standard_padding"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/pb_loading_indicator"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
 
 </FrameLayout>

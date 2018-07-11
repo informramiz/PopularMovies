@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="error_message_fetch_movies_failed">Fetch movies failed, please try again later.</string>
 </resources>
